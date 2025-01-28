@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown to New Year</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url('comp nou.jpg') no-repeat center center fixed;
+            background-size: 100% 100%;
+            color: white;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        #countdown {
+            text-align: center;
+        }
+
+        #countdown h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        #countdown span {
+            font-size: 5rem;
+            font-weight: bold;
+            color: #ff9800;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="countdown">
+        <h1>Countdown to New Year!</h1>
+        <span id="timer">00:00:00</span>
+    </div>
+
+    <script src="index.html"></script> <!-- Thay thế bằng tên file pháo hoa của bạn -->
+    <script>
+        // Đặt thời gian đến giao thừa
+        const newYearTime = new Date(new Date().getFullYear() + 1, 0, 1, 0, 0, 0).getTime();
+
+        // Cập nhật đếm ngược mỗi giây
+        const timerElement = document.getElementById('timer');
+        const countdownInterval = setInterval(() => {
+            const now = new Date().getTime();
+            const timeLeft = newYearTime - now;
+
+            // Tính giờ, phút, giây còn lại
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+            // Hiển thị đếm ngược
+            timerElement.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+            // Nếu đếm ngược kết thúc
+            if (timeLeft < 0) {
+                clearInterval(countdownInterval);
+                timerElement.textContent = "Happy New Year!";
+
+                // Gọi hiệu ứng pháo hoa
+                if (typeof startFireworks === 'function') {
+                    startFireworks();
+                }
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
