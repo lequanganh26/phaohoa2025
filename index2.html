@@ -5,6 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Countdown to New Year</title>
     <style>
+        /* Màn hình chờ */
+        #loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-family: Arial, sans-serif;
+            z-index: 1000;
+        }
+
+        /* Đếm ngược */
         body {
             margin: 0;
             display: flex;
@@ -38,15 +55,28 @@
             top: 0;
             left: 0;
         }
+
+        /* Phần tử để chèn nội dung pháo hoa */
+        #fireworks-container {
+            display: none; /* Ban đầu ẩn phần pháo hoa */
+        }
     </style>
 </head>
 <body>
-    <div id="countdown">
+    <!-- Màn hình chờ khi trang tải -->
+    <div id="loading-screen">
+        <div>Loading Countdown...</div>
+    </div>
+
+    <!-- Đếm ngược -->
+    <div id="countdown" style="display:none;">
         <h1>Countdown to New Year!</h1>
         <span id="timer">00:00:00</span>
     </div>
 
-    <script src="index.html"></script> <!-- Thay thế bằng tên file pháo hoa của bạn -->
+    <!-- Phần tử để chèn hiệu ứng pháo hoa -->
+    <div id="fireworks-container"></div>
+
     <script>
         // Đặt thời gian đến giao thừa
         const newYearTime = new Date(new Date().getFullYear() + 1, 0, 1, 0, 0, 0).getTime();
@@ -74,8 +104,27 @@
                 if (typeof startFireworks === 'function') {
                     startFireworks();
                 }
+
+                // Ẩn đếm ngược và hiển thị hiệu ứng pháo hoa
+                document.getElementById('countdown').style.display = 'none';
+                document.getElementById('fireworks-container').style.display = 'block';
+
+                // Tải và hiển thị nội dung pháo hoa từ file index.html
+                fetch('index.html')
+                    .then(response => response.text())
+                    .then(data => {
+                        // Chèn nội dung của index.html vào div 'fireworks-container'
+                        document.getElementById('fireworks-container').innerHTML = data;
+                    })
+                    .catch(error => console.error('Error loading fireworks content:', error));
             }
         }, 1000);
+
+        // Ẩn màn hình chờ và hiển thị đếm ngược sau khi trang tải xong
+        window.onload = function () {
+            document.getElementById('loading-screen').style.display = 'none';
+            document.getElementById('countdown').style.display = 'block';
+        }
     </script>
 </body>
 </html>
